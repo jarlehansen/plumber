@@ -11,12 +11,12 @@ fn main() {
 
     match args.command {
         Targets::Pihole(args) => {
-            println!("║   π-hole  Plumber  🔧      ║");
+            println!("║   π-hole  Plumber  🔧     ║");
             println!("╚═══════════════════════════╝\n");
             pi_hole::execute(&args);
         }
         Targets::ClaudeCode(args) => {
-            println!("║   Claude Code  🤖          ║");
+            println!("║   Claude Code  🤖         ║");
             println!("╚═══════════════════════════╝\n");
             claude_code::execute(&args);
         }

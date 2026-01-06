@@ -21,21 +21,24 @@ cargo install --path .        # update installed binary after changes
 
 **Pi-hole management:**
 ```bash
-# Update OS and Pi-hole (uses defaults: jarle@pi.hole:22)
-plumber pihole
+# Upgrade OS and Pi-hole (uses defaults: jarle@pi.hole:22)
+plumber pihole upgrade
 
 # Specify custom user and address
-plumber pihole -u admin -a 192.168.1.100:22
+plumber pihole --username admin --address 192.168.1.100:22 upgrade
 
-# Update and reboot after completion
-plumber pihole --reboot
+# Upgrade and reboot after completion
+plumber pihole upgrade --reboot
+
+# Combine flags (flags can go before or after the action)
+plumber pihole -u admin -a 192.168.1.100:22 upgrade --reboot
 ```
 
 **Claude Code management:**
 ```bash
 # Show current Claude Code version
-plumber claude --version
+plumber claude version
 
 # Upgrade Claude Code (fresh install)
-plumber claude --upgrade
+plumber claude upgrade
 ```
