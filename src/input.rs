@@ -4,17 +4,23 @@ use clap::Parser;
 #[command(version, about, long_about = None)]
 pub struct Args {
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: Targets,
 }
 
 #[derive(Parser, Debug)]
-pub enum Commands {
+pub enum Targets {
     #[command(name = "pihole")]
-    Pihole(PiHoleCmd),
+    Pihole(PiHoleTarget),
+
+    #[command(name = "claude")]
+    ClaudeCode(ClaudeCodeTarget),
 }
 
 #[derive(Parser, Debug)]
-pub struct PiHoleCmd {
+pub struct PiHoleTarget {
+    #[command(subcommand)]
+    pub action: PiHoleAction,
+
     #[arg(
         short,
         long,
@@ -30,9 +36,30 @@ pub struct PiHoleCmd {
         help = "Address of the remote host running the pi-hole installation"
     )]
     pub address: String,
+}
 
-    #[arg(short, long, help = "Reboot the system after upgrade")]
-    pub reboot: bool,
+#[derive(Parser, Debug)]
+pub enum PiHoleAction {
+    #[command(name = "upgrade", about = "Upgrade the OS and pi-hole packages")]
+    Upgrade {
+        #[arg(short, long, help = "Reboot the system after upgrade")]
+        reboot: bool,
+    },
+}
+
+#[derive(Parser, Debug)]
+pub struct ClaudeCodeTarget {
+    #[command(subcommand)]
+    pub action: ClaudeCodeAction,
+}
+
+#[derive(Parser, Debug)]
+pub enum ClaudeCodeAction {
+    #[command(name = "upgrade", about = "Upgrade the local claude code instance")]
+    Upgrade,
+
+    #[command(name = "version", about = "The current claude code version")]
+    Version,
 }
 
 pub(crate) fn parse_args() -> Args {

@@ -1,19 +1,23 @@
-use crate::input::PiHoleCmd;
+use crate::input::{PiHoleAction, PiHoleTarget};
 use ssh2::Session;
 use std::io;
 use std::io::{Read, Write};
 use std::net::TcpStream;
 
-pub fn execute(args: &PiHoleCmd) {
-    let session = login(args).expect("Authentication failed.");
-    upgrade(&session);
+pub fn execute(args: &PiHoleTarget) {
+    match &args.action {
+        PiHoleAction::Upgrade { reboot } => {
+            let session = login(args).expect("Authentication failed.");
+            upgrade(&session);
 
-    if args.reboot {
-        reboot(&session);
+            if *reboot {
+                reboot_cmd(&session);
+            }
+        }
     }
 }
 
-fn login(args: &PiHoleCmd) -> Result<Session, String> {
+fn login(args: &PiHoleTarget) -> Result<Session, String> {
     println!("Connecting as: {}", args.username);
 
     let tcp = TcpStream::connect(&args.address).unwrap();
@@ -62,9 +66,9 @@ fn upgrade(session: &Session) {
     println!("\nUpgrade completed!");
 }
 
-fn reboot(session: &Session) {
+fn reboot_cmd(session: &Session) {
     println!("Rebooting...");
-    let mut reboot = session.channel_session().unwrap();
-    reboot.exec("sudo reboot").unwrap();
+    let mut channel = session.channel_session().unwrap();
+    channel.exec("sudo reboot").unwrap();
     println!("Pi-hole is now rebooting");
 }
