@@ -9,10 +9,10 @@ pub struct Args {
 
 #[derive(Parser, Debug)]
 pub enum Targets {
-    #[command(name = "pihole")]
+    #[command(name = "pihole", about = "Pi-hole management")]
     Pihole(PiHoleTarget),
 
-    #[command(name = "claude")]
+    #[command(name = "claude", about = "Claude code management")]
     ClaudeCode(ClaudeCodeTarget),
 }
 
