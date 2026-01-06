@@ -19,7 +19,7 @@ cargo install --path .        # update installed binary after changes
 
 ## Usage
 
-**Pi-hole management 🕳️:**
+**Pi-hole 🕳️:**
 ```bash
 # Upgrade OS and Pi-hole (uses defaults: jarle@pi.hole:22)
 plumber pihole upgrade
@@ -34,7 +34,7 @@ plumber pihole upgrade --reboot
 plumber pihole -u admin -a 192.168.1.100:22 upgrade --reboot
 ```
 
-**Claude Code management 🤖:**
+**Claude Code 🤖:**
 ```bash
 # Show current Claude Code version
 plumber claude version
