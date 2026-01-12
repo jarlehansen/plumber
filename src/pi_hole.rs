@@ -42,7 +42,7 @@ fn login(args: &PiHoleTarget) -> Result<Session, String> {
 fn upgrade(session: &Session) {
     let mut channel = session.channel_session().unwrap();
     channel
-        .exec("sudo apt update && sudo apt full-upgrade -y && sudo pihole -up")
+        .exec(&build_upgrade_command())
         .unwrap();
 
     println!("Running commands to update os and pi-hole");
@@ -66,9 +66,26 @@ fn upgrade(session: &Session) {
     println!("\nUpgrade completed!");
 }
 
+fn build_upgrade_command() -> String {
+    "sudo apt update && sudo apt full-upgrade -y && sudo pihole -up".to_string()
+}
+
 fn reboot_cmd(session: &Session) {
     println!("Rebooting...");
     let mut channel = session.channel_session().unwrap();
     channel.exec("sudo reboot").unwrap();
     println!("Pi-hole is now rebooting");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_build_upgrade_command() {
+        let upgrade_cmd = build_upgrade_command();
+        assert!(upgrade_cmd.contains("update"));
+        assert!(upgrade_cmd.contains("full-upgrade"));
+        assert!(upgrade_cmd.contains("pihole"));
+    }
 }

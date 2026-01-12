@@ -16,8 +16,7 @@ fn upgrade_claude() {
     println!("Removing the old claude code installation");
     let npm_prefix =
         run_output("npm", &["config", "get", "prefix"]).expect("Failed to get npm prefix");
-
-    let claude_path = PathBuf::from(&npm_prefix).join("lib/node_modules/@anthropic-ai/claude-code");
+    let claude_path = get_claude_installation_path(&npm_prefix);
 
     if let Ok(canonical_path) = claude_path.canonicalize() {
         let package_json = canonical_path.join("package.json");
@@ -40,6 +39,10 @@ fn upgrade_claude() {
     run("npm", &["install", "-g", "@anthropic-ai/claude-code"]);
 
     show_current_version();
+}
+
+fn get_claude_installation_path(npm_prefix: &str) -> PathBuf {
+    PathBuf::from(&npm_prefix).join("lib/node_modules/@anthropic-ai/claude-code")
 }
 
 fn show_current_version() {
@@ -72,5 +75,29 @@ fn run_output(app: &str, args: &[&str]) -> Result<String, String> {
         Err(String::from_utf8_lossy(&output.stderr).trim().to_string())
     } else {
         Ok(String::from_utf8_lossy(&output.stdout).trim().to_string())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_claude_installation_path() {
+        let npm_prefix = "/usr/local";
+        let result = get_claude_installation_path(npm_prefix);
+
+        assert_eq!(
+            result,
+            PathBuf::from("/usr/local/lib/node_modules/@anthropic-ai/claude-code")
+        );
+    }
+
+    #[test]
+    fn test_get_claude_installation_path_with_trailing_slash() {
+        let npm_prefix = "/usr/local/";
+        let result = get_claude_installation_path(npm_prefix);
+
+        assert_eq!(result, PathBuf::from("/usr/local/lib/node_modules/@anthropic-ai/claude-code"));
     }
 }
