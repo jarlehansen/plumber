@@ -32,6 +32,14 @@ plumber pihole upgrade --reboot
 
 # Combine flags (flags can go before or after the action)
 plumber pihole -u admin -a 192.168.1.100:22 upgrade --reboot
+
+# Search Pi-hole logs (searches pihole.log and FTL.log)
+plumber pihole search "blocked"
+plumber pihole search "error"
+plumber pihole search "192.168.1.50"
+
+# Search is case-insensitive by default
+plumber pihole search "ERROR"  # finds "error", "Error", "ERROR", etc.
 ```
 
 **Claude Code 🤖:**
