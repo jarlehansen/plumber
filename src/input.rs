@@ -45,6 +45,12 @@ pub enum PiHoleAction {
         #[arg(short, long, help = "Reboot the system after upgrade")]
         reboot: bool,
     },
+
+    #[command(name = "search", about = "Search pi-hole logs for a specific term")]
+    Search {
+        #[arg(help = "The search term to look for in the logs")]
+        text: String,
+    }
 }
 
 #[derive(Parser, Debug)]
