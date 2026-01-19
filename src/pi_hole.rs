@@ -5,9 +5,16 @@ use std::io::{Read, Write};
 use std::net::TcpStream;
 
 pub fn execute(args: &PiHoleTarget) {
+    let session = match login(args) {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            return;
+        }
+    };
+
     match &args.action {
         PiHoleAction::Upgrade { reboot } => {
-            let session = login(args).expect("Authentication failed.");
             upgrade(&session);
 
             if *reboot {
@@ -15,7 +22,6 @@ pub fn execute(args: &PiHoleTarget) {
             }
         }
         PiHoleAction::Search { text } => {
-            let session = login(args).expect("Authentication failed.");
             search(&session, text);
         }
     }
@@ -24,7 +30,8 @@ pub fn execute(args: &PiHoleTarget) {
 fn login(args: &PiHoleTarget) -> Result<Session, String> {
     println!("Connecting as: {}", args.username);
 
-    let tcp = TcpStream::connect(&args.address).unwrap();
+    let tcp = TcpStream::connect(&args.address)
+        .map_err(|e| format!("Failed to connect to {}: {}", args.address, e))?;
     let mut session = Session::new().unwrap();
     session.set_tcp_stream(tcp);
     session.handshake().unwrap();
