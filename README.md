@@ -47,6 +47,6 @@ plumber pihole search "ERROR"  # finds "error", "Error", "ERROR", etc.
 # Show current Claude Code version
 plumber claude version
 
-# Upgrade Claude Code (fresh install)
-plumber claude upgrade
+# Show current usage statistics
+plumber claude usage
 ```

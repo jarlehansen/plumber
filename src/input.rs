@@ -63,6 +63,9 @@ pub struct ClaudeCodeTarget {
 pub enum ClaudeCodeAction {
     #[command(name = "version", about = "The current claude code version")]
     Version,
+
+    #[command(name = "usage", about = "The current claude quota usage")]
+    Usage,
 }
 
 pub(crate) fn parse_args() -> Args {
