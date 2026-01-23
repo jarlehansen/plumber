@@ -61,9 +61,6 @@ pub struct ClaudeCodeTarget {
 
 #[derive(Parser, Debug)]
 pub enum ClaudeCodeAction {
-    #[command(name = "upgrade", about = "Upgrade the local claude code instance")]
-    Upgrade,
-
     #[command(name = "version", about = "The current claude code version")]
     Version,
 }
