@@ -47,7 +47,8 @@ fn show_current_usage() {
 
     let resets_at = &usage_json["five_hour"]["resets_at"]
         .as_str()
-        .expect("Failed to extract reset_at from json structure")[11..16];
+        .and_then(|s| s.get(11..16))
+        .unwrap_or("N/A");
 
     println!("Usage {}%", usage);
     println!("Resets at {}", resets_at);
